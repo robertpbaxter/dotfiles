@@ -44,18 +44,8 @@ Plug 'prettier/vim-prettier', {
   \ 'do': 'yarn install',
   \ 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'yaml', 'html'] }
 
-" Code completion
-Plug 'ncm2/ncm2'
-Plug 'roxma/nvim-yarp'
-Plug 'roxma/vim-hug-neovim-rpc'
-
-" Completion sources
-Plug 'ncm2/ncm2-bufword'
-Plug 'ncm2/ncm2-path'
-Plug 'ncm2/ncm2-cssomni'
-Plug 'ncm2/ncm2-tern', {'do': 'npm install'}
-Plug 'ncm2/ncm2-ultisnips'
-
+" Intellisense completion
+Plug 'neoclide/coc.nvim', {'tag': '*', 'do': './install.sh'}
 
 " Snippets
 Plug 'SirVer/ultisnips'
@@ -253,7 +243,7 @@ noremap j gj
 noremap k gk
 
 " Quick config edit
-nmap <leader>ce :tabedit $HOME/.vimrc<cr>
+nmap <leader>ce :tabedit $HOME/code/dotfiles/nvim/.vimrc<cr>
 
 " Prevent F1 from opening help file without disabling it (remapped to ESC)
 noremap <F1> <Esc>
@@ -352,11 +342,13 @@ autocmd VimEnter,Colorscheme * :hi IndentGuidesEven  ctermbg=darkgrey
 " EditorConfig override
 let g:EditorConfig_disable_rules = ['max_line_length']
 
-" Code completion
-autocmd BufEnter * call ncm2#enable_for_buffer()
-set completeopt=noinsert,menuone,noselect
-let g:deoplete#enable_at_startup = 1
+" coc.nvim
+set nobackup
+set nowritebackup
+set cmdheight=2
+set updatetime=300
 set shortmess+=c
+set signcolumn=yes
 
 " FZF - fe refers to file explorer / nt refers to nerdtree
 nnoremap <silent> <expr> <Leader>fe (expand('%') =~ 'NERD_tree' ? "\<c-w>\<c-w>" : '').":FZF\<cr>"
@@ -371,9 +363,6 @@ autocmd FileType nerdtree setlocal relativenumber
 let NERDTreeHijackNetrw=0
 let NERDTreeShowHidden=1
 let NERDTreeShowLineNumbers=1
-
-" Required for operations modifying multiple buffers like rename.
-set hidden
 
 " Multi Cursor
 let multi_cursor_insert_maps={'j':1}

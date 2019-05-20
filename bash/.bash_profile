@@ -1,5 +1,11 @@
 #-----Config-----#
 
+# Node
+export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
+
+# Fuzzy search
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash
+
 # Load neovim using vim configs
 export NVM_DIR=~/.nvm
 source /usr/local/opt/nvm/nvm.sh
