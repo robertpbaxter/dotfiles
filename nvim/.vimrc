@@ -349,6 +349,8 @@ set cmdheight=2
 set updatetime=300
 set shortmess+=c
 set signcolumn=yes
+inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+
 
 " FZF - fe refers to file explorer / nt refers to nerdtree
 nnoremap <silent> <expr> <Leader>fe (expand('%') =~ 'NERD_tree' ? "\<c-w>\<c-w>" : '').":FZF\<cr>"
