@@ -53,7 +53,7 @@ Plug 'SirVer/ultisnips'
 " Comments
 Plug 'tpope/vim-commentary'
 
-" Fuzzy search
+" Fuzzy search (install fzf using git clone, install ripgrep via brew)
 set rtp+=~/.fzf
 Plug 'junegunn/fzf.vim'
 
