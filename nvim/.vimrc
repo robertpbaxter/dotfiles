@@ -395,6 +395,9 @@ noremap <leader>bt :ToggleBool<cr>
 " Restart coc.vim
 nnoremap <leader>cocr :CocRestart<cr>
 
+" Enable deoplete at startup (for typescript)
+let g:deoplete#enable_at_startup = 1
+
 
 
 
