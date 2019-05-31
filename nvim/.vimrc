@@ -392,6 +392,9 @@ let g:ale_fix_on_save = 1
 " Boolean Toggle
 noremap <leader>bt :ToggleBool<cr>
 
+" Enable deoplete at startup (for typescript)
+let g:deoplete#enable_at_startup = 1
+
 
 
 
