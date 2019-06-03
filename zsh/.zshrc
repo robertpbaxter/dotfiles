@@ -1,10 +1,3 @@
-#-----External configuration-----#
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-
-
-
-
-
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
@@ -100,7 +93,24 @@ source $ZSH/oh-my-zsh.sh
 # plugins, and themes. Aliases can be placed here, though oh-my-zsh
 # users are encouraged to define aliases within the ZSH_CUSTOM folder.
 # For a full list of active aliases, run `alias`.
-#
-# Example aliases
-# alias zshconfig="mate ~/.zshrc"
-# alias ohmyzsh="mate ~/.oh-my-zsh"
+
+
+
+
+
+#-----External configuration-----#
+
+# Fuzzy Search
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+# auto-completion
+if [ -f /opt/local/etc/profile.d/bash_completion.sh ]; then
+  . /opt/local/etc/profile.d/bash_completion.sh
+fi
+
+# Bash Profile Aliases
+source .bash_profile
+
+
+
+
