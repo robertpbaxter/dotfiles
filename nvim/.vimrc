@@ -42,7 +42,7 @@ Plug 'editorconfig/editorconfig-vim'
 " Prettier
 Plug 'prettier/vim-prettier', {
   \ 'do': 'yarn install',
-  \ 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'yaml', 'html'] }
+  \ 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'yaml', 'html', 'html.handlebars'] }
 
 " Intellisense completion
 Plug 'neoclide/coc.nvim', {'tag': '*', 'do': './install.sh'}
@@ -87,6 +87,7 @@ Plug 'terryma/vim-multiple-cursors'
 Plug 'sheerun/vim-polyglot' " Support for multiple languages
 Plug 'ElmCast/elm-vim' " Syntax highlighting, auto-indents, etc
 Plug 'w0rp/ale' " Asynchronous linting
+Plug 'joukevandermaas/vim-ember-hbs' " Ember handlebars syntax
 
 " Toggle boolean values
 Plug 'https://github.com/sagarrakshe/toggle-bool'
@@ -385,7 +386,8 @@ let g:ale_fixers = {
   \ 'javascript': ['prettier'],
   \ 'css': ['prettier'],
   \ 'typescript': ['prettier'],
-  \ 'json': ['prettier']
+  \ 'json': ['prettier'],
+  \ 'html.handlebars': ['prettier']
   \}
 let g:ale_fix_on_save = 1
 
@@ -397,6 +399,9 @@ nnoremap <leader>cocr :CocRestart<cr>
 
 " Enable deoplete at startup (for typescript)
 let g:deoplete#enable_at_startup = 1
+
+" Syntax highlighting
+let g:yats_host_keyword = 1
 
 
 

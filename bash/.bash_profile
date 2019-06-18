@@ -20,4 +20,4 @@ alias lsa="ls -al"
 alias gcd="git checkout develop"
 
 # StyleGuide
-alias styleguide="python -m SimpleHTTPServer 5000"
+alias styleguide="npx serve"
