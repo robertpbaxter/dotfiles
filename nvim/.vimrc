@@ -141,7 +141,7 @@ set ignorecase
 set smartcase
 
 " Soft wordwrap
-set wrap linebreak nolist
+set wrap linebreak
 set textwidth=0
 set wrapmargin=0
 set colorcolumn=0
@@ -175,7 +175,7 @@ set clipboard^=unnamed,unnamedplus
 set diffopt=iwhite
 
 " Autosave when focus is lost
-:au FocusLost * :wa
+" :au FocusLost * :wa
 
 " Save swap files outside of normal directories
 set swapfile
