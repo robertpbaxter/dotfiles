@@ -23,4 +23,4 @@ alias gcd="git checkout develop"
 alias styleguide="npx serve"
 
 # nvim development build
-alias nvim="~/nvim-osx64/bin/nvim"
+alias nvimdev="~/nvim-osx64/bin/nvim"
