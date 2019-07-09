@@ -3,13 +3,6 @@
 # Node
 export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
 
-# Fuzzy search
-# [ -f ~/.fzf.bash ] && source ~/.fzf.bash
-
-# Load neovim using vim configs
-export NVM_DIR=~/.nvm
-source /usr/local/opt/nvm/nvm.sh
-
 # List documents in a single row
 alias ls="ls -l"
 alias lsa="ls -al"
@@ -19,8 +12,30 @@ alias lsa="ls -al"
 # Git
 alias gcd="git checkout develop"
 
-# StyleGuide
-alias styleguide="npx serve"
+# nvm
+export NVM_DIR=~/.nvm
+source /usr/local/opt/nvm/nvm.sh
+export JAVA_HOME=/Library/Java/JavaVirtualMachines/adoptopenjdk-8.jdk/Contents/Home
 
-# nvim development build
-alias nvimdev="~/nvim-osx64/bin/nvim"
+# gg aliases
+REPO_DIR="$HOME/gg"
+GG_DIR="$REPO_DIR/GG"
+CLIENT_DIR="$REPO_DIR/client"
+SERVER_DIR="$REPO_DIR/server"
+STYLE_DIR="$REPO_DIR/style"
+gg() { cd "$REPO_DIR/gg"; }
+ggc() { cd "$REPO_DIR/client"; }
+ggs() { cd "$REPO_DIR/server"; }
+ggup() { (cd "$GG_DIR/gg-local-infrastructure" && vagrant up); }
+ggdown() { (cd "$GG_DIR/gg-local-infrastructure" && vagrant halt); }
+ggrmemails ()
+{
+    du -sh /var/tmp/emails
+    ls -1 /var/tmp/emails | wc -l
+    find /var/tmp/emails -type f \( -iname '*.json' -o -iname '*.html' \) -exec rm '{}' +
+  }
+
+# personal aliases
+ggi() { (cd "$CLIENT_DIR" && npm i); }
+ggdev() { (cd "$CLIENT_DIR" && nvim); }
+ggstyle() { (cd "$STYLE_DIR" && npx serve); }
