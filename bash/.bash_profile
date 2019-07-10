@@ -23,11 +23,11 @@ GG_DIR="$REPO_DIR/GG"
 CLIENT_DIR="$REPO_DIR/client"
 SERVER_DIR="$REPO_DIR/server"
 STYLE_DIR="$REPO_DIR/style"
-gg() { cd "$REPO_DIR/gg"; }
-ggc() { cd "$REPO_DIR/client"; }
-ggs() { cd "$REPO_DIR/server"; }
-ggup() { (cd "$GG_DIR/gg-local-infrastructure" && vagrant up); }
-ggdown() { (cd "$GG_DIR/gg-local-infrastructure" && vagrant halt); }
+ggg() { cd "$REPO_DIR/gg" }
+ggc() { cd "$REPO_DIR/client" }
+ggs() { cd "$REPO_DIR/server" }
+ggup() { (cd "$GG_DIR/gg-local-infrastructure" && vagrant up) }
+ggdown() { (cd "$GG_DIR/gg-local-infrastructure" && vagrant halt) }
 ggrmemails ()
 {
     du -sh /var/tmp/emails
@@ -36,6 +36,6 @@ ggrmemails ()
   }
 
 # personal aliases
-ggi() { (cd "$CLIENT_DIR" && npm i); }
-ggdev() { (cd "$CLIENT_DIR" && nvim); }
-ggstyle() { (cd "$STYLE_DIR" && npx serve); }
+ggi() { (cd "$CLIENT_DIR" && npm i) }
+ggdev() { (cd "$CLIENT_DIR" && nvim) }
+ggstyle() { (cd "$STYLE_DIR" && npx serve) }
