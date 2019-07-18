@@ -39,3 +39,4 @@ ggrmemails ()
 ggi() { (cd "$CLIENT_DIR" && npm i) }
 ggdev() { (cd "$CLIENT_DIR" && nvim) }
 ggstyle() { (cd "$STYLE_DIR" && npx serve) }
+buildprod(){ npm run build -- -e production -a false false NODE_EXTRA_CA_CERTS=~/gg/client/ssl/mkcert.rootCA.pem && npm run serve development }
