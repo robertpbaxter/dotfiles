@@ -35,8 +35,19 @@ ggrmemails ()
     find /var/tmp/emails -type f \( -iname '*.json' -o -iname '*.html' \) -exec rm '{}' +
   }
 
-# personal aliases
+#-----personal aliases----#
+
+#client folder actions
 ggi() { (cd "$CLIENT_DIR" && npm i) }
 ggdev() { (cd "$CLIENT_DIR" && nvim) }
+
+# style guide
 ggstyle() { (cd "$STYLE_DIR" && npx serve) }
-buildprod(){ npm run build -- -e production -a false false NODE_EXTRA_CA_CERTS=~/gg/client/ssl/mkcert.rootCA.pem && npm run serve development }
+
+# run in production mode
+buildprod(){ (npm run build -- -e production -a false && NODE_EXTRA_CA_CERTS=~/gg/client/ssl/mkcert.rootCA.pem npm run serve development) }
+
+# local AWS development stack
+upstack(){ (cd "$CLIENT_DIR" && npm run startLocalstack && npm run buildServerlessComponents) }
+destack(){ (cd "$CLIENT_DIR" && npm run destroyLocalstack) }
+restack(){ (cd "$CLIENT_DIR" && npm run destroyLocalstack && npm run startLocalstack && npm run buildServerlessComponents) }
