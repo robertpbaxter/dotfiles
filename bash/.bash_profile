@@ -51,3 +51,7 @@ buildprod(){ (npm run build -- -e production -a false && NODE_EXTRA_CA_CERTS=~/g
 upstack(){ (cd "$CLIENT_DIR" && npm run startLocalstack && npm run buildServerlessComponents) }
 destack(){ (cd "$CLIENT_DIR" && npm run destroyLocalstack) }
 restack(){ (cd "$CLIENT_DIR" && npm run destroyLocalstack && npm run startLocalstack && npm run buildServerlessComponents) }
+
+# local tomcat server
+alias start-tomcat="/opt/gg/tomcat/bin/startup.sh"
+alias stop-tomcat="/opt/gg/tomcat/bin/shutdown.sh"
