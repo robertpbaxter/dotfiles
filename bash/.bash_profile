@@ -1,7 +1,7 @@
 #-----Config-----#
 
 # Node
-export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
+export PATH="$HOME/.yarn/bin:/usr/sbin:/Library/PostgreSQL/11/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
 
 # List documents in a single row
 alias ls="ls -l"
@@ -55,3 +55,6 @@ restack(){ (cd "$CLIENT_DIR" && npm run destroyLocalstack && npm run startLocals
 # local tomcat server
 alias start-tomcat="/opt/gg/tomcat/bin/startup.sh"
 alias stop-tomcat="/opt/gg/tomcat/bin/shutdown.sh"
+
+# access psql server
+db_postgres(){ (psql "dbname=postgres host=localhost user=ggadmin password=ggpass port=5432") }
