@@ -35,7 +35,15 @@ ggrmemails ()
     find /var/tmp/emails -type f \( -iname '*.json' -o -iname '*.html' \) -exec rm '{}' +
   }
 
-#-----personal aliases----#
+# intelliJ
+COMMON_OPTIONS=(-Dgreenlight.application.properties=conf/application-dev.properties -Dlogback.configurationFile=logback.xml -classpath "target/*:target/lib/*")
+build-server() { (cd "$SERVER_DIR" && mvn clean install -Dmaven.test.skip=true --batch-mode); }
+start-repo() { (cd "$SERVER_DIR/RepoSvc" && java "${COMMON_OPTIONS[@]}" -Dderby.stream.error.file=RepositoryRoot/log/derby.log -Dfile.encoding=UTF-8 com.greenlight.camel.CamelMain); }
+start-history() { (cd "$SERVER_DIR/ActivityHistory" && java "${COMMON_OPTIONS[@]}" com.greenlight.camel.CamelMain); }
+start-auth() { (cd "$SERVER_DIR/AuthZ" && java "${COMMON_OPTIONS[@]}" com.greenlight.idm.CamelMain); }
+
+start-server() { start-history & start-auth & start-repo & }
+stop-server() { jobs -p | xargs -n1 pkill -SIGINT -g; }
 
 #client folder actions
 ggi() { (cd "$CLIENT_DIR" && npm i) }
@@ -58,3 +66,5 @@ alias stop-tomcat="/opt/gg/tomcat/bin/shutdown.sh"
 
 # access psql server
 db_postgres(){ (psql "dbname=postgres host=localhost user=ggadmin password=ggpass port=5432") }
+
+
