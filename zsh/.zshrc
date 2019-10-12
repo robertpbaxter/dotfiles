@@ -111,6 +111,7 @@ fi
 # Bash Profile Aliases
 source .bash_profile
 
-
+# Relocate dumped config files to cache directory
+compinit -d ~/.cache/zsh/zcompdump-$ZSH_VERSION
 
 
