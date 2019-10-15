@@ -114,5 +114,8 @@ source .bash_profile
 # Vi editing mode
 set -o vi
 
+=======
+# Relocate dumped config files to cache directory
+compinit -d ~/.cache/zsh/zcompdump-$ZSH_VERSION
 
 
