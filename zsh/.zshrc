@@ -111,6 +111,8 @@ fi
 # Bash Profile Aliases
 source .bash_profile
 
+# Vi editing mode
+set -o vi
 
 
 

@@ -103,6 +103,9 @@ Plug 'Shougo/deoplete.nvim'
 " For Denite features
 Plug 'Shougo/denite.nvim'
 
+" Postgres highlighting
+Plug 'darold/pgFormatter'
+
 
 
 
@@ -117,7 +120,7 @@ endif
 
 " Syntax highlighting
 syntax on
-  colorscheme codedark
+colorscheme codedark
 
 " Enable mouse support & hide while typing
 set mouse=a
@@ -431,6 +434,9 @@ let g:deoplete#enable_at_startup = 1
 
 " Syntax highlighting
 let g:yats_host_keyword = 1
+
+" Use pgFormatter with gq commands
+au FileType sql setl formatprg=/usr/local/Cellar/perl/5.28.1/bin/pg_format\ -
 
 
 
