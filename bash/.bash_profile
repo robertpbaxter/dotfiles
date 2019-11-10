@@ -1,7 +1,13 @@
 #-----Config-----#
 
+# nvim as default
+alias vim=nvim
+alias vi=nvim
+export EDITOR=nvim
+export GIT_EDITOR=nvim
+
 # Node
-export PATH="$HOME/.yarn/bin:/usr/sbin:/Library/PostgreSQL/11/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
+export PATH="$HOME/.yarn/bin:usr/local/opt/perl/bin:/usr/sbin:usr/local/bin:/Library/PostgreSQL/11/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
 
 # List documents in a single row
 alias ls="ls -l"
@@ -65,6 +71,7 @@ alias start-tomcat="/opt/gg/tomcat/bin/startup.sh"
 alias stop-tomcat="/opt/gg/tomcat/bin/shutdown.sh"
 
 # access psql server
-db_postgres(){ (psql "dbname=postgres host=localhost user=ggadmin password=ggpass port=5432") }
+db_analytics(){ (psql "dbname=analytics host=localhost user=ggadmin password=ggpass port=5432") }
 
-
+# cert location for builds pre-2019.4.0
+# export NODE_EXTRA_CA_CERTS="$(mkcert -CAROOT)/rootCA.pem"
