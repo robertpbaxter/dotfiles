@@ -28,12 +28,17 @@ REPO_DIR="$HOME/gg"
 GG_DIR="$REPO_DIR/GG"
 CLIENT_DIR="$REPO_DIR/client"
 SERVER_DIR="$REPO_DIR/server"
+MICRO_DIR="$REPO_DIR/microservices"
 STYLE_DIR="$REPO_DIR/style"
 ggg() { cd "$REPO_DIR/gg" }
 ggc() { cd "$REPO_DIR/client" }
 ggs() { cd "$REPO_DIR/server" }
-ggup() { (cd "$GG_DIR/gg-local-infrastructure" && vagrant up) }
-ggdown() { (cd "$GG_DIR/gg-local-infrastructure" && vagrant halt) }
+ggup() { (cd "$GG_DIR/local/vm" && ./gg.sh start) }
+ggdown() { (cd "$GG_DIR/local/vm" && ./gg.sh stop) }
+
+start-docker() { (cd "$GG_DIR/local/docker"; ./gg.sh Start; ./gg.sh 'Start Confluent'; ./gg.sh 'Start Neo4j'); }
+stop-docker() { (cd "$GG_DIR/local/docker"; ./gg.sh Stop); }
+
 ggrmemails ()
 {
     du -sh /var/tmp/emails
@@ -44,16 +49,15 @@ ggrmemails ()
 # intelliJ
 COMMON_OPTIONS=(-Dgreenlight.application.properties=conf/application-dev.properties -Dlogback.configurationFile=logback.xml -classpath "target/*:target/lib/*")
 build-server() { (cd "$SERVER_DIR" && mvn clean install -Dmaven.test.skip=true --batch-mode); }
+build-impact() { (cd "$MICRO_DIR/impact-service" && mvn clean install -D maven.test.skip=true --batch-mode); }
 start-repo() { (cd "$SERVER_DIR/RepoSvc" && java "${COMMON_OPTIONS[@]}" -Dderby.stream.error.file=RepositoryRoot/log/derby.log -Dfile.encoding=UTF-8 com.greenlight.camel.CamelMain); }
 start-history() { (cd "$SERVER_DIR/ActivityHistory" && java "${COMMON_OPTIONS[@]}" com.greenlight.camel.CamelMain); }
 start-auth() { (cd "$SERVER_DIR/AuthZ" && java "${COMMON_OPTIONS[@]}" com.greenlight.idm.CamelMain); }
+start-impact() { (cd $MICRO_DIR/impact-service && java -jar target/greenlight-impact-service.jar); }
+start-analytics() { (cd "$SERVER_DIR/Analytics/target" && java -jar greenlight-analytics-service.jar); }
 
-start-server() { start-history & start-auth & start-repo & }
+start-server() { start-history & start-auth & start-repo & start-impact & }
 stop-server() { jobs -p | xargs -n1 pkill -SIGINT -g; }
-
-#client folder actions
-ggi() { (cd "$CLIENT_DIR" && npm i) }
-ggdev() { (cd "$CLIENT_DIR" && nvim) }
 
 # style guide
 ggstyle() { (cd "$STYLE_DIR" && npx serve) }
