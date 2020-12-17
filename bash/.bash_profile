@@ -33,6 +33,7 @@ STYLE_DIR="$REPO_DIR/style"
 ggg() { cd "$REPO_DIR/gg" }
 ggc() { cd "$REPO_DIR/client" }
 ggs() { cd "$REPO_DIR/server" }
+ggm() { cd "$REPO_DIR/microservices" }
 ggup() { (cd "$GG_DIR/local/vm" && ./gg.sh start) }
 ggdown() { (cd "$GG_DIR/local/vm" && ./gg.sh stop) }
 
