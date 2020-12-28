@@ -9,17 +9,25 @@ else
   let s:editor_root=expand('~/.vim')
 endif
 
-"----------Plugins----------"
 
-" Automatic plugin setup
+
+
+
+"----------Plugin-Setup----------"
+
+" Automatic setup
 if empty(glob(s:editor_root . '/autoload/plug.vim'))
     silent execute '!curl -fLo ' . s:editor_root . '/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
       autocmd VimEnter * PlugInstall
     endif
 
-" Insert plugins between tags
 
+
+
+
+" Insert plugins between tags
 call plug#begin(s:editor_root . '/plugged')
+"----------Plugins----------"
 
 " CodeDark color scheme
 Plug 'tomasiser/vim-code-dark'
@@ -47,19 +55,13 @@ Plug 'prettier/vim-prettier', {
 " Intellisense completion
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
-" Snippets
-Plug 'SirVer/ultisnips'
-
 " Comments
 Plug 'tpope/vim-commentary'
+Plug 'kevinoid/vim-jsonc'
 
 " Fuzzy search (install fzf using git clone, install ripgrep via brew)
-set rtp+=~/.fzf
+set rtp+=/usr/local/opt/fzf
 Plug 'junegunn/fzf.vim'
-
-" Better / search (not sure how to use this yet)
-Plug 'junegunn/vim-pseudocl'
-Plug 'junegunn/vim-oblique'
 
 " File browsing
 Plug 'tpope/vim-vinegar'
@@ -84,8 +86,16 @@ Plug 'jiangmiao/auto-pairs'
 Plug 'terryma/vim-multiple-cursors'
 
 " Syntaxes
-Plug 'sheerun/vim-polyglot' " Support for multiple languages
-Plug 'ElmCast/elm-vim' " Syntax highlighting, auto-indents, etc
+lua <<EOF
+require'nvim-treesitter.configs'.setup {
+  ensure_installed = "maintained",
+  highlight = {
+    enable = true,
+    disable = {},
+  },
+}
+EOF
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}  " We recommend updating the parsers on update
 Plug 'w0rp/ale' " Asynchronous linting
 Plug 'joukevandermaas/vim-ember-hbs' " Ember handlebars syntax
 
@@ -94,14 +104,6 @@ Plug 'https://github.com/sagarrakshe/toggle-bool'
 
 " GraphQL support for Vim
 Plug 'jparise/vim-graphql'
-
-" Vim-Plug
-Plug 'HerringtonDarkholme/yats.vim'
-Plug 'mhartington/nvim-typescript', {'do': './install.sh'}
-" For async completion
-Plug 'Shougo/deoplete.nvim'
-" For Denite features
-Plug 'Shougo/denite.nvim'
 
 " Postgres highlighting
 Plug 'darold/pgFormatter'
@@ -177,9 +179,6 @@ set clipboard^=unnamed,unnamedplus
 " Ignore whitespace in vimdiff
 set diffopt=iwhite
 
-" Autosave when focus is lost
-" :au FocusLost * :wa
-
 " Save swap files outside of normal directories
 set swapfile
 set dir=~/tmp
@@ -189,6 +188,7 @@ set dir=~/tmp
 
 " Start editing a new file in insert mode
 autocmd BufNewFile * startinsert
+
 
 
 
@@ -222,7 +222,7 @@ set incsearch
 nnoremap gV `[v`]
 
 " Clear search highlighting
-nnoremap <Leader><space> :noh<cr>
+nnoremap <leader><space> :noh<cr>
 
 " Highlight colors
 set hlsearch
@@ -238,6 +238,9 @@ hi Search ctermfg=Black
 " Leader (spacebar) remaps
 let mapleader="\<space>"
 let maplocalleader=','
+
+" Map Enter <leader> in normal mode as well
+nmap <cr> <leader>
 
 " Pasting without finger contortion
 set pastetoggle=<f12>
@@ -314,9 +317,9 @@ nnoremap <leader>j <c-w>j
 nnoremap <leader>k <c-w>k
 nnoremap <leader>l <c-w>l
 
-" Rebinding deoplete movements up/down
-inoremap <expr> <c-j> pumvisible() ? "\<C-n>" : "\<c-j>"
-inoremap <expr> <c-k> pumvisible() ? "\<C-p>" : "\<c-k>"
+" Split windows on leader
+nnoremap <leader>vs :vs<cr>
+nnoremap <leader>sp :sp<cr>
 
 " Quick sorting
 vnoremap <leader>sa :sort<cr>
@@ -346,46 +349,114 @@ autocmd VimEnter,Colorscheme * :hi IndentGuidesEven  ctermbg=darkgrey
 " EditorConfig override
 let g:EditorConfig_disable_rules = ['max_line_length']
 
-"
+
 " coc.nvim
+let g:coc_global_extensions = [
+  \ 'coc-css',
+  \ 'coc-ember',
+  \ 'coc-eslint',
+  \ 'coc-fzf-preview',
+  \ 'coc-git',
+  \ 'coc-highlight',
+  \ 'coc-html',
+  \ 'coc-java',
+  \ 'coc-json',
+  \ 'coc-lists',
+  \ 'coc-markdownlint',
+  \ 'coc-prettier',
+  \ 'coc-sh',
+  \ 'coc-snippets',
+  \ 'coc-tsserver',
+  \ 'coc-vimlsp',
+  \ 'coc-xml',
+  \ 'coc-yaml'
+\ ]
+
+"""Recommended config
+set hidden
 set nobackup
 set nowritebackup
 set cmdheight=2
 set updatetime=300
 set shortmess+=c
-set signcolumn=yes
-" Ctrl+space to trigger completion
+if has("patch-8.1.1564")
+  " Recently vim can merge signcolumn and number column into one
+  set signcolumn=number
+else
+  set signcolumn=yes
+endif
+
+"""Tab to trigger completion with characters ahead and navigate
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+"""Ctrl+space to trigger completion
 inoremap <silent><expr> <c-space> coc#refresh()
-" Use <cr> to confirm completion, `<C-g>u` means break undo chain at current position.
-" Coc only does snippet and additional edit on confirm.
-inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
-"Use `[c` and `]c` to navigate diagnostics
-nmap <silent> [c <Plug>(coc-diagnostic-prev)
-nmap <silent> ]c <Plug>(coc-diagnostic-next)
-" Remap keys for gotos
+
+""" Make <CR> auto-select the first completion item and notify coc.nvim to
+""" format on enter, <cr> could be remapped by other vim plugin
+inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
+                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+
+""" Use `[g` and `]g` to navigate diagnostics
+""" Use `:CocDiagnostics` to get all diagnostics of current buffer in location list.
+nmap <silent> [g <Plug>(coc-diagnostic-prev)
+nmap <silent> ]g <Plug>(coc-diagnostic-next)
+
+""" GoTo code navigation.
 nmap <silent> gd <Plug>(coc-definition)
 nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
-" Use K to show documentation in preview window
+
+""" Use K to show documentation in preview window.
 nnoremap <silent> K :call <SID>show_documentation()<CR>
+
 function! s:show_documentation()
   if (index(['vim','help'], &filetype) >= 0)
     execute 'h '.expand('<cword>')
+  elseif (coc#rpc#ready())
+    call CocActionAsync('doHover')
   else
-    call CocAction('doHover')
+    execute '!' . &keywordprg . " " . expand('<cword>')
   endif
 endfunction
-" Highlight symbol under cursor on CursorHold
-autocmd CursorHold * silent call CocActionAsync('highlight')
-" Remap for rename current word
-nmap <leader>rn <Plug>(coc-rename)
-" Fix autofix problem of current line
-nmap <leader>qf  <Plug>(coc-fix-current)
-" /coc.nvim
-"
 
-" FZF - fe refers to file explorer / nt refers to nerdtree
+""" Highlight the symbol and its references when holding the cursor.
+autocmd CursorHold * silent call CocActionAsync('highlight')
+
+""" Symbol renaming.
+nmap <leader>rn <Plug>(coc-rename)
+
+""" Code action on selected line
+nnoremap <leader>a <Plug>(coc-codeaction-line)
+
+""" Organize imports
+nnoremap <leader>oi :call CocAction('runCommand', 'editor.action.organizeImport')<cr>
+
+""" Formatting selected code.
+xmap <leader>f  <Plug>(coc-format-selected)
+nmap <leader>f  <Plug>(coc-format-selected)
+
+augroup mygroup
+  autocmd!
+  " Setup formatexpr specified filetype(s).
+  autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
+  " Update signature help on jump placeholder.
+  autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+augroup end
+
+" /coc.nvim
+
+" FZF - fe refers to file explorer
 nnoremap <silent> <expr> <Leader>fe (expand('%') =~ 'NERD_tree' ? "\<c-w>\<c-w>" : '').":FZF\<cr>"
 nnoremap <silent> <expr> <leader>bb (expand('%') =~ 'NERD_tree' ? "\<c-w>\<c-w>" : '').":Buffers\<cr>"
 nnoremap <silent> <expr> <leader>rg (expand('%') =~ 'NERD_tree' ? "\<c-w>\<c-w>" : '').":Rg\<cr>"
@@ -407,8 +478,6 @@ let g:easy_align_ignore_groups=['String']
 xmap ga <plug>(EasyAlign)
 nmap ga <plug>(EasyAlign)
 
-" Polyglot
-let g:polyglot_disabled = ['elm']
 
 " Auto Pairs
 let g:AutoPairsShortcutBackInsert = '<c-b>'
@@ -431,9 +500,6 @@ noremap <leader>bt :ToggleBool<cr>
 
 " Restart coc.vim
 nnoremap <leader>cocr :CocRestart<cr>
-
-" Enable deoplete at startup (for typescript)
-let g:deoplete#enable_at_startup = 1
 
 " Syntax highlighting
 let g:yats_host_keyword = 1
