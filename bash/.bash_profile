@@ -37,7 +37,7 @@ ggm() { cd "$REPO_DIR/microservices" }
 ggup() { (cd "$GG_DIR/local/vm" && ./gg.sh start) }
 ggdown() { (cd "$GG_DIR/local/vm" && ./gg.sh stop) }
 
-start-docker() { (cd "$GG_DIR/local/docker"; ./gg.sh Start; ./gg.sh 'Start Confluent'; ./gg.sh 'Start Neo4j'); }
+start-docker() { (cd "$GG_DIR/local/docker"; ./gg.sh Start); }
 stop-docker() { (cd "$GG_DIR/local/docker"; ./gg.sh Stop); }
 
 ggrmemails ()
