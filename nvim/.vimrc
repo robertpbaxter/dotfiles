@@ -68,9 +68,6 @@ Plug 'tpope/vim-vinegar'
 Plug 'tpope/vim-eunuch'
 Plug 'scrooloose/nerdtree'
 
-" Motions
-Plug 'Lokaltog/vim-easymotion'
-
 " Text objects
 Plug 'tpope/vim-repeat' " Better repeating than just native commands
 Plug 'tpope/vim-surround' " For changing surrounding tags?
@@ -120,10 +117,6 @@ if !has('nvim')
   set encoding=utf-8
 endif
 
-" Syntax highlighting
-syntax on
-colorscheme codedark
-
 " Enable mouse support & hide while typing
 set mouse=a
 set mousehide
@@ -161,9 +154,6 @@ set softtabstop=2
 " Allow for cursor beyond last character
 set virtualedit=onemore
 
-" Spell check
-set spell
-
 " Switch buffers without saving
 set hidden
 
@@ -195,6 +185,12 @@ autocmd BufNewFile * startinsert
 
 "----------Visuals----------"
 
+" Syntax highlighting
+syntax on
+colorscheme codedark
+hi HighlightedyankRegion term=bold ctermbg=0 guibg=#31D57C
+set nospell "Turns off annoying red text from spellchecker
+
 " Default numbering globally and in help file
 autocmd FileType help setlocal number relativenumber
 set number relativenumber
@@ -222,7 +218,7 @@ set incsearch
 nnoremap gV `[v`]
 
 " Clear search highlighting
-nnoremap <leader><space> :noh<cr>
+nnoremap <leader>n :noh<cr>
 
 " Highlight colors
 set hlsearch
@@ -251,6 +247,9 @@ noremap k gk
 
 " Quick config edit
 nmap <leader>ce :tabedit $HOME/code/dotfiles/nvim/.vimrc<cr>
+
+" Quick yank full path
+nmap <leader>cp :let @+=expand('%:p')<cr>
 
 " Prevent F1 from opening help file without disabling it (remapped to ESC)
 noremap <F1> <Esc>
@@ -325,6 +324,9 @@ nnoremap <leader>sp :sp<cr>
 vnoremap <leader>sa :sort<cr>
 vnoremap <leader>sd :sort!<cr>
 
+" Open yank list
+nnoremap <silent> <space>y  :<C-u>CocList -A --normal yank<cr>
+
 
 
 
@@ -333,9 +335,9 @@ vnoremap <leader>sd :sort!<cr>
 
 " Airline
 set laststatus=2
-let airline_theme='hybridline'
-let airline_powerline_fonts=1
+let g:airline_statusline_ontop=1
 let g:airline#extensions#tabline#enabled=1
+let airline_theme='hybridline'
 
 " Better whitespace
 let strip_whitespace_on_save=1
@@ -369,7 +371,8 @@ let g:coc_global_extensions = [
   \ 'coc-tsserver',
   \ 'coc-vimlsp',
   \ 'coc-xml',
-  \ 'coc-yaml'
+  \ 'coc-yaml',
+  \ 'coc-yank'
 \ ]
 
 """Recommended config
@@ -461,6 +464,10 @@ nnoremap <silent> <expr> <Leader>fe (expand('%') =~ 'NERD_tree' ? "\<c-w>\<c-w>"
 nnoremap <silent> <expr> <leader>bb (expand('%') =~ 'NERD_tree' ? "\<c-w>\<c-w>" : '').":Buffers\<cr>"
 nnoremap <silent> <expr> <leader>rg (expand('%') =~ 'NERD_tree' ? "\<c-w>\<c-w>" : '').":Rg\<cr>"
 
+" Exclude filenames from ripgrep: Disable while not in use
+" (There are benefits to searching filenames)
+" command! -bang -nargs=* Rg call fzf#vim#grep("rg --column --line-number --no-heading --color=always --smart-case ".shellescape(<q-args>), 1, {'options': '--delimiter : --nth 4..'}, <bang>0)
+
 " Nerd Tree
 nnoremap <leader>nt :NERDTreeToggle<cr>
 autocmd StdinReadPre * let s:std_in=1
@@ -500,9 +507,6 @@ noremap <leader>bt :ToggleBool<cr>
 
 " Restart coc.vim
 nnoremap <leader>cocr :CocRestart<cr>
-
-" Syntax highlighting
-let g:yats_host_keyword = 1
 
 " Use pgFormatter with gq commands
 au FileType sql setl formatprg=/usr/local/Cellar/perl/5.28.1/bin/pg_format\ -
