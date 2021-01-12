@@ -42,6 +42,7 @@ ggdown() { (cd "$GG_DIR/local/vm" && ./gg.sh stop) }
 
 start-docker() { (cd "$GG_DIR/local/docker"; ./gg.sh Start); }
 stop-docker() { (cd "$GG_DIR/local/docker"; ./gg.sh Stop); }
+docker-status() { (cd "$GG_DIR/local/docker"; ./gg.sh Status); }
 
 ggrmemails ()
 {
