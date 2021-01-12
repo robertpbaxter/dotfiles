@@ -81,6 +81,3 @@ alias stop-tomcat="/opt/gg/tomcat/bin/shutdown.sh"
 
 # access psql server
 db_analytics(){ (psql "dbname=analytics host=localhost user=ggadmin password=ggpass port=5432") }
-
-# cert location for builds pre-2019.4.0
-# export NODE_EXTRA_CA_CERTS="$(mkcert -CAROOT)/rootCA.pem"
