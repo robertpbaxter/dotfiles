@@ -9,6 +9,9 @@ export GIT_EDITOR=nvim
 # Node
 export PATH="$HOME/.yarn/bin:usr/local/opt/perl/bin:/usr/sbin:usr/local/bin:/Library/PostgreSQL/11/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
 
+# FZF exclude node modules
+export FZF_DEFAULT_COMMAND='rg --files --follow --no-ignore-vcs --hidden -g "!{node_modules/*,src/greenlight/node_modules/*,.git/*}"'
+
 # List documents in a single row
 alias ls="ls -l"
 alias lsa="ls -al"
