@@ -22,8 +22,9 @@ alias lsa="ls -al"
 alias gcd="git checkout develop"
 
 # nvm
-export NVM_DIR=~/.nvm
-source /usr/local/opt/nvm/nvm.sh
+export NVM_DIR="$HOME/.nvm"
+[ -s "/usr/local/opt/nvm/nvm.sh" ] && . "/usr/local/opt/nvm/nvm.sh"  # This loads nvm
+[ -s "/usr/local/opt/nvm/etc/bash_completion.d/nvm" ] && . "/usr/local/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
 export JAVA_HOME=/Library/Java/JavaVirtualMachines/adoptopenjdk-8.jdk/Contents/Home
 
 # gg aliases
