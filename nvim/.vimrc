@@ -218,7 +218,7 @@ set incsearch
 nnoremap gV `[v`]
 
 " Clear search highlighting
-nnoremap <leader>n :noh<cr>
+nnoremap <leader>nn :noh<cr>
 
 " Highlight colors
 set hlsearch
@@ -440,7 +440,7 @@ autocmd CursorHold * silent call CocActionAsync('highlight')
 nmap <leader>rn <Plug>(coc-rename)
 
 """ Code action on selected line
-nnoremap <leader>a <Plug>(coc-codeaction-line)
+nmap <leader>a <Plug>(coc-codeaction-line)
 
 """ Organize imports
 nnoremap <leader>oi :call CocAction('runCommand', 'editor.action.organizeImport')<cr>
