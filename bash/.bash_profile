@@ -31,20 +31,34 @@ export JAVA_HOME=/Library/Java/JavaVirtualMachines/adoptopenjdk-8.jdk/Contents/H
 REPO_DIR="$HOME/gg"
 GG_DIR="$REPO_DIR/GG"
 CLIENT_DIR="$REPO_DIR/client"
-SERVER_DIR="$REPO_DIR/server"
-MICRO_DIR="$REPO_DIR/microservices"
-STYLE_DIR="$REPO_DIR/style"
-ggg() { cd "$REPO_DIR/gg" }
-ggc() { cd "$REPO_DIR/client" }
-ggs() { cd "$REPO_DIR/server" }
-ggm() { cd "$REPO_DIR/microservices" }
-ggup() { (cd "$GG_DIR/local/vm" && ./gg.sh start) }
-ggdown() { (cd "$GG_DIR/local/vm" && ./gg.sh stop) }
+SERVER_DIR="$REPO_DIR/greenlight-server"
+SERVER_AH_DIR="$REPO_DIR/gg-activityhistory-service"
+SERVER_AUTHZ_DIR="$REPO_DIR/gg-authz-service"
+SERVER_REPO_DIR="$REPO_DIR/gg-repo-service"
 
+# directory shortcuts
+ggg() { cd "$GG_DIR" }
+ggc() { cd "$CLIENT_DIR" }
+ggs() { cd "$SERVER_DIR" }
+
+ggah() { cd "$SERVER_AH_DIR" }
+build-ah() { (cd "$SERVER_AH_DIR"; ./gg.sh build); }
+start-ah() { (cd "$SERVER_AH_DIR"; ./gg.sh run); }
+
+ggauth() { cd "$SERVER_AUTHZ_DIR" }
+build-auth() { (cd "$SERVER_AUTHZ_DIR"; ./gg.sh build); }
+start-auth() { (cd "$SERVER_AUTHZ_DIR"; ./gg.sh run); }
+
+ggrepo() { cd "$SERVER_REPO_DIR" }
+build-repo() { (cd "$SERVER_REPO_DIR"; ./gg.sh build); }
+start-repo() { (cd "$SERVER_REPO_DIR"; ./gg.sh run); }
+
+docker-status() { (cd "$GG_DIR/local/docker"; ./gg.sh Status); }
 start-docker() { (cd "$GG_DIR/local/docker"; ./gg.sh Start); }
 stop-docker() { (cd "$GG_DIR/local/docker"; ./gg.sh Stop); }
-docker-status() { (cd "$GG_DIR/local/docker"; ./gg.sh Status); }
+update-docker() { (cd "$GG_DIR/local/docker"; ./gg.sh Stop && git pull && ./gg.sh Start); }
 
+# clear emails
 ggrmemails ()
 {
     du -sh /var/tmp/emails
@@ -53,21 +67,6 @@ ggrmemails ()
   }
 
 # intelliJ
-COMMON_OPTIONS=(-Dgreenlight.application.properties=conf/application-dev.properties -Dlogback.configurationFile=logback.xml -classpath "target/*:target/lib/*")
-build-server() { (cd "$SERVER_DIR" && mvn clean install -Dmaven.test.skip=true --batch-mode); }
-build-impact() { (cd "$MICRO_DIR/impact-service" && mvn clean install -D maven.test.skip=true --batch-mode); }
-start-repo() { (cd "$SERVER_DIR/RepoSvc" && java "${COMMON_OPTIONS[@]}" -Dderby.stream.error.file=RepositoryRoot/log/derby.log -Dfile.encoding=UTF-8 com.greenlight.camel.CamelMain); }
-start-history() { (cd "$SERVER_DIR/ActivityHistory" && java "${COMMON_OPTIONS[@]}" com.greenlight.camel.CamelMain); }
-start-auth() { (cd "$SERVER_DIR/AuthZ" && java "${COMMON_OPTIONS[@]}" com.greenlight.idm.CamelMain); }
-start-impact() { (cd $MICRO_DIR/impact-service && java -jar target/greenlight-impact-service.jar); }
-start-analytics() { (cd "$SERVER_DIR/Analytics/target" && java -jar greenlight-analytics-service.jar); }
-
-start-server() { start-history & start-auth & start-repo & start-impact & }
-stop-server() { jobs -p | xargs -n1 pkill -SIGINT -g; }
-
-# style guide
-ggstyle() { (cd "$STYLE_DIR" && npx serve) }
-
 # run in production mode
 buildprod(){ (npm run build -- -e production -a false && NODE_EXTRA_CA_CERTS=~/gg/client/ssl/mkcert.rootCA.pem npm run serve development) }
 
