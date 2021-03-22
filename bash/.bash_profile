@@ -32,6 +32,7 @@ REPO_DIR="$HOME/gg"
 GG_DIR="$REPO_DIR/GG"
 CLIENT_DIR="$REPO_DIR/client"
 SERVER_DIR="$REPO_DIR/greenlight-server"
+SERVER_JC_DIR="$REPO_DIR/gg-java-common"
 SERVER_AH_DIR="$REPO_DIR/gg-activityhistory-service"
 SERVER_AUTHZ_DIR="$REPO_DIR/gg-authz-service"
 SERVER_REPO_DIR="$REPO_DIR/gg-repo-service"
@@ -39,19 +40,48 @@ SERVER_REPO_DIR="$REPO_DIR/gg-repo-service"
 # directory shortcuts
 ggg() { cd "$GG_DIR" }
 ggc() { cd "$CLIENT_DIR" }
-ggs() { cd "$SERVER_DIR" }
 
-ggah() { cd "$SERVER_AH_DIR" }
-build-ah() { (cd "$SERVER_AH_DIR"; ./gg.sh build); }
-start-ah() { (cd "$SERVER_AH_DIR"; ./gg.sh run); }
+ggjc() {
+  if [ ! $# = 1 ]; then
+    cd "$SERVER_JC_DIR"
+  else
+    (cd "$SERVER_JC_DIR"; ./gg.sh $@)
+  fi
+}
 
-ggauth() { cd "$SERVER_AUTHZ_DIR" }
-build-auth() { (cd "$SERVER_AUTHZ_DIR"; ./gg.sh build); }
-start-auth() { (cd "$SERVER_AUTHZ_DIR"; ./gg.sh run); }
+ggs() {
+  if [ ! $# = 1 ]; then
+    cd "$SERVER_DIR"
+  else
+    (cd "$SERVER_DIR"; ./gg.sh $@)
+  fi
+}
 
-ggrepo() { cd "$SERVER_REPO_DIR" }
-build-repo() { (cd "$SERVER_REPO_DIR"; ./gg.sh build); }
-start-repo() { (cd "$SERVER_REPO_DIR"; ./gg.sh run); }
+ggah() {
+  if [ ! $# = 1 ]; then
+    cd "$SERVER_AH_DIR"
+  else
+    (cd "$SERVER_AH_DIR"; ./gg.sh $@)
+  fi
+}
+
+ggauth() {
+  if [ ! $# = 1 ]; then
+    cd "$SERVER_AUTHZ_DIR"
+  else
+    (cd "$SERVER_AUTHZ_DIR"; ./gg.sh $@)
+  fi
+}
+
+ggrepo() {
+  if [ ! $# = 1 ]; then
+    cd "$SERVER_REPO_DIR"
+  else
+    (cd "$SERVER_REPO_DIR"; ./gg.sh $@)
+  fi
+}
+
+ggkey() { cd "$GG_DIR/local/aws"; ./get_mvn_token.sh; source ~/.bash_profile; }
 
 docker-status() { (cd "$GG_DIR/local/docker"; ./gg.sh Status); }
 start-docker() { (cd "$GG_DIR/local/docker"; ./gg.sh Start); }
@@ -66,18 +96,12 @@ ggrmemails ()
     find /var/tmp/emails -type f \( -iname '*.json' -o -iname '*.html' \) -exec rm '{}' +
   }
 
-# intelliJ
-# run in production mode
-buildprod(){ (npm run build -- -e production -a false && NODE_EXTRA_CA_CERTS=~/gg/client/ssl/mkcert.rootCA.pem npm run serve development) }
-
-# local AWS development stack
-upstack(){ (cd "$CLIENT_DIR" && npm run startLocalstack && npm run buildServerlessComponents) }
-destack(){ (cd "$CLIENT_DIR" && npm run destroyLocalstack) }
-restack(){ (cd "$CLIENT_DIR" && npm run destroyLocalstack && npm run startLocalstack && npm run buildServerlessComponents) }
-
 # local tomcat server
 alias start-tomcat="/opt/gg/tomcat/bin/startup.sh"
 alias stop-tomcat="/opt/gg/tomcat/bin/shutdown.sh"
 
 # access psql server
 db_analytics(){ (psql "dbname=analytics host=localhost user=ggadmin password=ggpass port=5432") }
+
+# Maven config for AWS
+source ~/.codeartifact_mvn_auth

@@ -218,7 +218,7 @@ set incsearch
 nnoremap gV `[v`]
 
 " Clear search highlighting
-nnoremap <leader>nn :noh<cr>
+nnoremap <leader>nm :noh<cr>
 
 " Highlight colors
 set hlsearch
