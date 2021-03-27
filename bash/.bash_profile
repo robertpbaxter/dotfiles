@@ -20,6 +20,8 @@ alias lsa="ls -al"
 
 # Git
 alias gcd="git checkout develop"
+alias gp="git pull"
+alias gcb="git checkout -b"
 
 # nvm
 export NVM_DIR="$HOME/.nvm"
@@ -81,7 +83,7 @@ ggrepo() {
   fi
 }
 
-ggkey() { cd "$GG_DIR/local/aws"; ./get_mvn_token.sh; source ~/.bash_profile; }
+ggkey() { (cd "$GG_DIR/local/aws"; ./get_mvn_token.sh; source ~/.bash_profile;) }
 
 docker-status() { (cd "$GG_DIR/local/docker"; ./gg.sh Status); }
 start-docker() { (cd "$GG_DIR/local/docker"; ./gg.sh Start); }

@@ -83,15 +83,6 @@ Plug 'jiangmiao/auto-pairs'
 Plug 'terryma/vim-multiple-cursors'
 
 " Syntaxes
-lua <<EOF
-require'nvim-treesitter.configs'.setup {
-  ensure_installed = "maintained",
-  highlight = {
-    enable = true,
-    disable = {},
-  },
-}
-EOF
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}  " We recommend updating the parsers on update
 Plug 'w0rp/ale' " Asynchronous linting
 Plug 'joukevandermaas/vim-ember-hbs' " Ember handlebars syntax
@@ -110,6 +101,17 @@ Plug 'darold/pgFormatter'
 
 
 call plug#end()
+
+lua <<EOF
+require'nvim-treesitter.configs'.setup {
+  ensure_installed = {"bash", "css", "glimmer", "go", "graphql", "html", "javascript", "jsdoc", "json", "comment", "lua", "regex", "tsx", "typescript", "vue"},
+  highlight = {
+    enable = true,
+    disable = {},
+  },
+}
+EOF
+
 "----------Basic-config----------"
 
 " Encoding

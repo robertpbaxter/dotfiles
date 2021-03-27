@@ -1,8 +1,6 @@
 {
   "coc.preferences.extensionUpdateCheck": "daily",
   "coc.preferences.formatOnSaveFiletypes": ["json", "javascript", "typescript"],
-  "suggest.noselect": false,
-  "suggest.floatEnable": false,
   "suggest.minTriggerInputLength": 3,
   "snippets.extends": {
     "typescript": ["javascript"]
