@@ -20,7 +20,6 @@ alias lsa="ls -al"
 
 # Git
 alias gcd="git checkout develop"
-alias gp="git pull"
 alias gcb="git checkout -b"
 
 # nvm
