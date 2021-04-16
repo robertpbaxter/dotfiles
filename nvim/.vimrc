@@ -67,6 +67,8 @@ Plug 'junegunn/fzf.vim'
 Plug 'tpope/vim-vinegar'
 Plug 'tpope/vim-eunuch'
 Plug 'scrooloose/nerdtree'
+Plug 'jistr/vim-nerdtree-tabs'
+Plug 'ryanoasis/vim-devicons'
 
 " Text objects
 Plug 'tpope/vim-repeat' " Better repeating than just native commands
@@ -95,6 +97,9 @@ Plug 'jparise/vim-graphql'
 
 " Postgres highlighting
 Plug 'darold/pgFormatter'
+
+" Go
+Plug 'fatih/vim-go'
 
 
 
@@ -329,6 +334,11 @@ vnoremap <leader>sd :sort!<cr>
 " Open yank list
 nnoremap <silent> <space>y  :<C-u>CocList -A --normal yank<cr>
 
+" Git Fugitive
+map <leader>gb :Git blame<CR>
+map <leader>gs :Gstatus<CR>
+map <leader>gd :Gdiff<CR>
+
 
 
 
@@ -356,21 +366,28 @@ let g:EditorConfig_disable_rules = ['max_line_length']
 
 " coc.nvim
 let g:coc_global_extensions = [
+  \ 'coc-browser',
   \ 'coc-css',
+  \ 'coc-cssmodules',
+  \ 'coc-dash-complete',
   \ 'coc-ember',
   \ 'coc-eslint',
   \ 'coc-fzf-preview',
   \ 'coc-git',
+  \ 'coc-go',
+  \ 'coc-graphql',
   \ 'coc-highlight',
   \ 'coc-html',
+  \ 'coc-html-css-support',
+  \ 'coc-htmlhint',
   \ 'coc-java',
   \ 'coc-json',
   \ 'coc-lists',
   \ 'coc-markdownlint',
   \ 'coc-prettier',
+  \ 'coc-rome',
   \ 'coc-sh',
   \ 'coc-snippets',
-  \ 'coc-tsserver',
   \ 'coc-vimlsp',
   \ 'coc-xml',
   \ 'coc-yaml',
@@ -512,6 +529,12 @@ nnoremap <leader>cocr :CocRestart<cr>
 
 " Use pgFormatter with gq commands
 au FileType sql setl formatprg=/usr/local/Cellar/perl/5.28.1/bin/pg_format\ -
+
+" Auto Import for Go
+let g:go_fmt_command = "goimports"
+
+" Swap directory
+set dir=~/.local/share/nvim/swap/
 
 
 
