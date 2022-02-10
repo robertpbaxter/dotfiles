@@ -48,9 +48,6 @@ Plug 'nathanaelkane/vim-indent-guides'
 " Formatting
 Plug 'editorconfig/editorconfig-vim'
 
-" Prettier
-Plug 'prettier/vim-prettier', { 'do': 'yarn install' }
-
 " Intellisense completion
 Plug 'neoclide/coc.nvim', {'do': 'yarn install --frozen-lockfile'}
 
@@ -86,7 +83,7 @@ Plug 'terryma/vim-multiple-cursors'
 " Syntaxes
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}  " We recommend updating the parsers on update
 Plug 'leafgarland/typescript-vim'
-Plug 'joukevandermaas/vim-ember-hbs' " Ember handlebars syntax
+" Plug 'joukevandermaas/vim-ember-hbs' " Ember handlebars syntax
 
 " Postgres highlighting
 Plug 'darold/pgFormatter'
@@ -362,7 +359,6 @@ autocmd VimEnter,Colorscheme * :hi IndentGuidesEven  ctermbg=darkgrey
 " EditorConfig override
 let g:EditorConfig_disable_rules = ['max_line_length']
 
-
 " coc.nvim
 let g:coc_global_extensions = [
   \ 'coc-actions',
@@ -484,10 +480,23 @@ nnoremap <silent> <expr> <leader>rg (expand('%') =~ 'NERD_tree' ? "\<c-w>\<c-w>"
 
 " Nerd Tree
 nnoremap <leader>nt :NERDTreeToggle<cr>
-autocmd StdinReadPre * let s:std_in=1
-"autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+
+""" Exit Vim if NERDTree is the only window remaining in the only tab.
+autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
+
+""" Close the tab if NERDTree is the only window remaining in it.
+autocmd BufEnter * if winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
+
+""" If another buffer tries to replace NERDTree, put it in the other window, and bring back NERDTree.
+autocmd BufEnter * if bufname('#') =~ 'NERD_tree_\d\+' && bufname('%') !~ 'NERD_tree_\d\+' && winnr('$') > 1 |
+    \ let buf=bufnr() | buffer# | execute "normal! \<C-W>w" | execute 'buffer'.buf | endif
+
 autocmd FileType nerdtree setlocal relativenumber
+let NERDTreeAutoDeleteBuffer = 1
+let NERDTreeDirArrows = 1
 let NERDTreeHijackNetrw=0
+let NERDTreeMinimalUI = 1
+let NERDTreeQuitOnOpen = 1
 let NERDTreeShowHidden=1
 let NERDTreeShowLineNumbers=1
 
