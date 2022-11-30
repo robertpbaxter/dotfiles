@@ -29,8 +29,9 @@ if empty(glob(s:editor_root . '/autoload/plug.vim'))
 call plug#begin(s:editor_root . '/plugged')
 "----------Plugins----------"
 
-" CodeDark color scheme
-Plug 'tomasiser/vim-code-dark'
+" Color schemes
+Plug 'morhetz/gruvbox'
+" Plug 'tomasiser/vim-code-dark' "codedark
 
 " Git
 Plug 'airblade/vim-gitgutter'
@@ -46,11 +47,6 @@ Plug 'nathanaelkane/vim-indent-guides'
 
 " Formatting
 Plug 'editorconfig/editorconfig-vim'
-
-" Prettier
-Plug 'prettier/vim-prettier', {
-  \ 'do': 'yarn install',
-  \ 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'yaml', 'html', 'html.handlebars'] }
 
 " Intellisense completion
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
@@ -86,14 +82,8 @@ Plug 'terryma/vim-multiple-cursors'
 
 " Syntaxes
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}  " We recommend updating the parsers on update
-Plug 'w0rp/ale' " Asynchronous linting
-Plug 'joukevandermaas/vim-ember-hbs' " Ember handlebars syntax
-
-" Toggle boolean values
-Plug 'https://github.com/sagarrakshe/toggle-bool'
-
-" GraphQL support for Vim
-Plug 'jparise/vim-graphql'
+Plug 'leafgarland/typescript-vim'
+" Plug 'joukevandermaas/vim-ember-hbs' " Ember handlebars syntax
 
 " Postgres highlighting
 Plug 'darold/pgFormatter'
@@ -186,6 +176,12 @@ set dir=~/tmp
 " Start editing a new file in insert mode
 autocmd BufNewFile * startinsert
 
+" Toggle paste mode on and off
+map <leader>pp :setlocal paste!<cr>
+
+" Disable paste mode when leaving insert mode
+autocmd InsertLeave * set nopaste
+
 
 
 
@@ -194,7 +190,7 @@ autocmd BufNewFile * startinsert
 
 " Syntax highlighting
 syntax on
-colorscheme codedark
+autocmd vimenter * ++nested colorscheme gruvbox
 hi HighlightedyankRegion term=bold ctermbg=0 guibg=#31D57C
 set nospell "Turns off annoying red text from spellchecker
 
@@ -363,36 +359,36 @@ autocmd VimEnter,Colorscheme * :hi IndentGuidesEven  ctermbg=darkgrey
 " EditorConfig override
 let g:EditorConfig_disable_rules = ['max_line_length']
 
-
 " coc.nvim
+let g:coc_disable_startup_warning = 1
 let g:coc_global_extensions = [
+  \ 'coc-actions',
   \ 'coc-browser',
   \ 'coc-css',
   \ 'coc-cssmodules',
-  \ 'coc-dash-complete',
   \ 'coc-ember',
   \ 'coc-eslint',
   \ 'coc-fzf-preview',
   \ 'coc-git',
-  \ 'coc-go',
-  \ 'coc-graphql',
   \ 'coc-highlight',
   \ 'coc-html',
   \ 'coc-html-css-support',
   \ 'coc-htmlhint',
-  \ 'coc-java',
   \ 'coc-json',
   \ 'coc-lists',
   \ 'coc-markdownlint',
   \ 'coc-prettier',
-  \ 'coc-rome',
   \ 'coc-sh',
   \ 'coc-snippets',
+  \ 'coc-solargraph',
+  \ 'coc-tsserver',
   \ 'coc-vimlsp',
   \ 'coc-xml',
   \ 'coc-yaml',
   \ 'coc-yank'
 \ ]
+  " \ 'coc-dash-complete', // Currently broken
+
 
 """Recommended config
 set hidden
@@ -408,13 +404,6 @@ else
   set signcolumn=yes
 endif
 
-"""Tab to trigger completion with characters ahead and navigate
-inoremap <silent><expr> <TAB>
-      \ pumvisible() ? "\<C-n>" :
-      \ <SID>check_back_space() ? "\<TAB>" :
-      \ coc#refresh()
-inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
-
 function! s:check_back_space() abort
   let col = col('.') - 1
   return !col || getline('.')[col - 1]  =~# '\s'
@@ -423,9 +412,8 @@ endfunction
 """Ctrl+space to trigger completion
 inoremap <silent><expr> <c-space> coc#refresh()
 
-""" Make <CR> auto-select the first completion item and notify coc.nvim to
-""" format on enter, <cr> could be remapped by other vim plugin
-inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
+" format on enter, <cr> could be remapped by other vim plugin
+inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
                               \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 
 """ Use `[g` and `]g` to navigate diagnostics
@@ -453,7 +441,7 @@ function! s:show_documentation()
 endfunction
 
 """ Highlight the symbol and its references when holding the cursor.
-autocmd CursorHold * silent call CocActionAsync('highlight')
+autocmd CursorHold * silent! call CocActionAsync('highlight')
 
 """ Symbol renaming.
 nmap <leader>rn <Plug>(coc-rename)
@@ -476,8 +464,6 @@ augroup mygroup
   autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
 augroup end
 
-" /coc.nvim
-
 " FZF - fe refers to file explorer
 nnoremap <silent> <expr> <Leader>fe (expand('%') =~ 'NERD_tree' ? "\<c-w>\<c-w>" : '').":FZF\<cr>"
 nnoremap <silent> <expr> <leader>bb (expand('%') =~ 'NERD_tree' ? "\<c-w>\<c-w>" : '').":Buffers\<cr>"
@@ -489,10 +475,23 @@ nnoremap <silent> <expr> <leader>rg (expand('%') =~ 'NERD_tree' ? "\<c-w>\<c-w>"
 
 " Nerd Tree
 nnoremap <leader>nt :NERDTreeToggle<cr>
-autocmd StdinReadPre * let s:std_in=1
-"autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+
+""" Exit Vim if NERDTree is the only window remaining in the only tab.
+autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
+
+""" Close the tab if NERDTree is the only window remaining in it.
+autocmd BufEnter * if winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
+
+""" If another buffer tries to replace NERDTree, put it in the other window, and bring back NERDTree.
+autocmd BufEnter * if bufname('#') =~ 'NERD_tree_\d\+' && bufname('%') !~ 'NERD_tree_\d\+' && winnr('$') > 1 |
+    \ let buf=bufnr() | buffer# | execute "normal! \<C-W>w" | execute 'buffer'.buf | endif
+
 autocmd FileType nerdtree setlocal relativenumber
+let NERDTreeAutoDeleteBuffer = 1
+let NERDTreeDirArrows = 1
 let NERDTreeHijackNetrw=0
+let NERDTreeMinimalUI = 1
+let NERDTreeQuitOnOpen = 1
 let NERDTreeShowHidden=1
 let NERDTreeShowLineNumbers=1
 
@@ -508,24 +507,17 @@ nmap ga <plug>(EasyAlign)
 " Auto Pairs
 let g:AutoPairsShortcutBackInsert = '<c-b>'
 
-" Reformat upon save with Ale / Prettier
-let g:ale_fixers = {
-  \ 'javascript': ['prettier'],
-  \ 'css': ['prettier'],
-  \ 'typescript': ['prettier'],
-  \ 'json': ['prettier'],
-  \ 'html.handlebars': ['prettier']
-  \}
-let g:ale_fix_on_save = 1
+" Reformat upon save with coc-prettier
+command! -nargs=0 Prettier :CocCommand prettier.formatFile
+let g:coc_filetype_map = {
+      \ 'html.handlebars': 'handlebars',
+      \ }
 
 " Force reformat
-noremap <leader>pret :Prettier<cr>
-
-" Boolean Toggle
-noremap <leader>bt :ToggleBool<cr>
+noremap <leader>pr :CocCommand prettier.formatFile<cr>
 
 " Restart coc.vim
-nnoremap <leader>cocr :CocRestart<cr>
+nnoremap <leader>cr :CocRestart<cr>
 
 " Use pgFormatter with gq commands
 au FileType sql setl formatprg=/usr/local/Cellar/perl/5.28.1/bin/pg_format\ -
@@ -551,5 +543,5 @@ augroup myvimrc
 " Autoreload externally edited file
 augroup autoreload
   autocmd!
-  autocmd CursorHold,CursorHoldI * checktime
+  autocmd CursorHold,CursorHoldI * silent! checktime
 augroup END
