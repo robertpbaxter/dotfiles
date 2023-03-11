@@ -1,8 +1,8 @@
 {
-  "coc.preferences.extensionUpdateCheck": "daily",
-  "coc.preferences.formatOnSaveFiletypes": ["json", "javascript", "typescript"],
-  "suggest.minTriggerInputLength": 3,
-  "snippets.extends": {
-    "typescript": ["javascript"]
-  }
+  "coc.preferences.formatOnSave": true,
+  "eslint.autoFixOnSave": true,
+  "workspace.rootPatterns": ["package.json", ".git"],
+  "prettier.singleQuote": true,
+  "coc.preferences.extensionUpdateCheck": "weekly",
+  "tsserver.log": "normal"
 }
