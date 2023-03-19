@@ -138,7 +138,7 @@ export EDITOR=nvim
 export GIT_EDITOR=nvim
 
 # Path exports
-export PATH="$HOME/.yarn/bin:usr/local/bin:/usr/sbin:/Library/PostgreSQL/11/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
+export PATH="$HOME/.yarn/bin:usr/local/bin:/usr/sbin:$HOME/.config/yarn/global/node_modules/.bin:/usr/local/opt/postgresql@15/bin:$PATH"
 
 # GoLang
 export GOPATH=$HOME/go
