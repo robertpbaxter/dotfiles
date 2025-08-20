@@ -4,5 +4,9 @@
   "workspace.rootPatterns": ["package.json", ".git"],
   "prettier.singleQuote": true,
   "coc.preferences.extensionUpdateCheck": "weekly",
-  "tsserver.log": "normal"
+  "tsserver.log": "normal",
+  "snippets.ultisnips.pythonPrompt": false,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  }
 }

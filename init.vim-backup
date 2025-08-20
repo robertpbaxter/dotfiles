@@ -56,8 +56,9 @@ Plug 'tpope/vim-commentary'
 Plug 'kevinoid/vim-jsonc'
 
 " Fuzzy search (install fzf using git clone, install ripgrep via brew)
-set rtp+=/usr/local/opt/fzf
+Plug '/opt/homebrew/opt/fzf'
 Plug 'junegunn/fzf.vim'
+
 
 " File browsing
 Plug 'tpope/vim-vinegar'
@@ -115,8 +116,9 @@ endif
 set mouse=a
 set mousehide
 
-" Code folding off (not sure how I could use this yet)
-set nofoldenable
+" Code folding: zc to close, zo to open, zr to open all, zm to close all
+" Code folding off
+" set nofoldenable
 
 " Expected backspace functionality
 set backspace=indent,eol,start
@@ -224,6 +226,11 @@ nnoremap <leader>nm :noh<cr>
 set hlsearch
 hi Search ctermbg=LightGreen
 hi Search ctermfg=Black
+
+" Folding JSON objects
+set foldlevel=20
+set foldmethod=expr
+set foldexpr=nvim_treesitter#foldexpr()
 
 
 
@@ -403,7 +410,7 @@ set signcolumn=yes
 " no select by `"suggest.noselect": true` in your configuration file
 " NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
 " other plugin before putting this into your config
-inoremap <silent><expr> <TAB>
+inoremap <silent><expr> <c-j>
       \ coc#pum#visible() ? coc#pum#next(1) :
       \ CheckBackspace() ? "\<Tab>" :
       \ coc#refresh()
@@ -546,7 +553,8 @@ nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
 " FZF - fe refers to file explorer
 nnoremap <silent> <expr> <Leader>fe (expand('%') =~ 'NERD_tree' ? "\<c-w>\<c-w>" : '').":FZF\<cr>"
 nnoremap <silent> <expr> <leader>bb (expand('%') =~ 'NERD_tree' ? "\<c-w>\<c-w>" : '').":Buffers\<cr>"
-nnoremap <silent> <expr> <leader>rg (expand('%') =~ 'NERD_tree' ? "\<c-w>\<c-w>" : '').":Rg\<cr>"
+nnoremap <silent> <expr> <leader>rg (expand('%') =~ 'NERD_tree' ? "\<c-w>\<c-w>" : '').":Rg!\<cr>"
+nnoremap <silent> <expr> <leader>rrg (expand('%') =~ 'NERD_tree' ? "\<c-w>\<c-w>" : '').":Rg\<cr>"
 
 " Exclude filenames from ripgrep: Disable while not in use
 " command! -bang -nargs=* Rg call fzf#vim#grep("rg --column --line-number --no-heading --color=always --smart-case ".shellescape(<q-args>), 1, {'options': '--delimiter : --nth 4..'}, <bang>0)
@@ -605,6 +613,7 @@ autocmd CursorHold,CursorHoldI * lua require('nvim-lightbulb').update_lightbulb(
 " Autocomplete via copilot
 imap <silent><script><expr> <S-tab> copilot#Accept("\<CR>")
 let g:copilot_no_tab_map = v:true
+let g:copilot_node_command = "~/.nvm/versions/node/v16.15.1/bin/node"
 
 
 
